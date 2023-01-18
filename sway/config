@@ -1,0 +1,207 @@
+### Variables
+exec source ~/.zshrc
+set $mod Mod4
+set $term kitty
+set $browser firefox
+#set $menu dmenu_path | dmenu | xargs swaymsg exec --
+set $menu wofi --show=drun --lines=5 --prompt=""
+set $lock swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 5 --fade-in 0.5
+
+
+font "Cascadia Code" Medium 11
+
+### Output configuration
+#output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * max_render_time 5 bg /usr/share/backgrounds/sway/background.png fill
+
+output "eDP-1" {
+	mode 1920x1080@59.977Hz
+	pos 1920 0
+	transform normal
+	scale 1.0
+	scale_filter smart
+	adaptive_sync on
+	dpms on
+}
+
+output "HDMI-A-1" {
+	mode  1920x1080@74.986Hz
+    pos 4000 0
+    transform normal
+    #transform 270
+	scale 1.0
+    scale_filter smart
+    adaptive_sync on
+    dpms on
+}
+
+### Idle configuration
+exec swayidle -w \
+    timeout 900 'swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 5 --fade-in 0.2' \
+    timeout 2700 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+    before-sleep 'swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 5 --fade-in 0.2'
+
+### Key bindings
+bindsym $mod+Return exec $term
+bindsym $mod+Shift+q kill
+bindsym $mod+d exec $menu
+floating_modifier $mod normal
+bindsym $mod+Shift+r reload
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+l exec $lock
+
+# Moving around
+# Move your focus around
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
+# Move the focused window with focus + Shift
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
+
+# Workspaces:
+# Switch to workspace
+bindsym $mod+1 workspace number 1
+bindsym $mod+2 workspace number 2
+bindsym $mod+3 workspace number 3
+bindsym $mod+4 workspace number 4
+bindsym $mod+5 workspace number 5
+bindsym $mod+6 workspace number 6
+bindsym $mod+7 workspace number 7
+bindsym $mod+8 workspace number 8
+bindsym $mod+9 workspace number 9
+bindsym $mod+s workspace number 9
+bindsym $mod+0 workspace number 10
+# Move focused container to workspace
+bindsym $mod+Shift+1 move container to workspace number 1
+bindsym $mod+Shift+2 move container to workspace number 2
+bindsym $mod+Shift+3 move container to workspace number 3
+bindsym $mod+Shift+4 move container to workspace number 4
+bindsym $mod+Shift+5 move container to workspace number 5
+bindsym $mod+Shift+6 move container to workspace number 6
+bindsym $mod+Shift+7 move container to workspace number 7
+bindsym $mod+Shift+8 move container to workspace number 8
+bindsym $mod+Shift+9 move container to workspace number 9
+bindsym $mod+Shift+s move container to workspace number 9
+bindsym $mod+Shift+0 move container to workspace number 10
+# Set workspace to specific output
+workspace 9 output eDP-1
+
+# Layout
+bindsym $mod+b splith
+bindsym $mod+v splitv
+bindsym $mod+t layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
+bindsym $mod+f fullscreen
+bindsym $mod+Shift+space floating toggle
+
+# Scratchpad:
+# Move the currently focused window to the scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+Shift+o move scratchpad
+# Show the next scratchpad window or hide the focused scratchpad window.
+bindsym $mod+minus scratchpad show
+bindsym $mod+o scratchpad show
+
+# Resizing containers:
+mode "resize" {
+    bindsym Left resize shrink width 20px
+    bindsym Down resize grow height 20px
+    bindsym Up resize shrink height 20px
+    bindsym Right resize grow width 20px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Status Bar:
+bar {
+    position top
+	swaybar_command waybar
+	workspace_buttons yes
+    colors {
+        statusline #d8dee9
+        background #2e3440
+        inactive_workspace #a5abb6 #9f9f9f #ffffff
+    }
+}
+
+# Added section
+
+include /etc/sway/config.d/*
+
+# Exec
+
+exec mako
+exec_always xrandr --output $(xrandr | grep -m 1 XWAYLAND | awk '{print $1;}') --primary
+
+# Inputs
+input type:keyboard {
+	xkb_layout fr
+    xkb_numlock enabled
+}
+
+input "16715:1:Alpaca_Keyboards_ErgoDox_76_\"HotDox\"" {
+	xkb_layout us
+	xkb_variant intl
+}
+
+input type:mouse {
+    dwt disabled
+    events enabled
+    accel_profile flat
+}
+
+input type:touchpad {
+    tap enabled
+    tap_button_map lrm
+    middle_emulation enabled
+    dwt disabled
+}
+
+# Keybinds
+# Apps
+#bindsym $mod+F2 exec brave --ignore-gpu-blocklist --enable-zero-copy --enable-features=VaapiVideoDecoder --enable-gpu --use-gl=egl --ozone-platform-hint=auto &
+#bindsym $mod+Ctrl+o exec electron15 --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WebRTCPipeWireCapturer --enable-features=VaapiVideoDecoder --use-angle=egl --enable-gpu /usr/lib/discord/app.asar &;exec spotify --disable-gpu &
+
+bindsym $mod+Ctrl+o exec discord --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WebRTCPipeWireCapturer --enable-features=VaapiVideoDecoder --use-angle=egl --enable-gpu &; exec spotify --disable-gpu &
+
+bindsym xf86audioraisevolume exec "zsh /home/boj/.config/sway/notify-volume.sh up"
+bindsym xf86audiolowervolume exec "zsh /home/boj/.config/sway/notify-volume.sh down"
+bindsym Ctrl+xf86audioraisevolume exec "zsh /home/boj/.config/sway/notify-volume.sh micup"
+bindsym Ctrl+xf86audiolowervolume exec "zsh /home/boj/.config/sway/notify-volume.sh micdown"
+bindsym XF86AudioMute exec "zsh /home/boj/.config/sway/notify-volume.sh muteaudio"
+bindsym Ctrl+XF86AudioMute exec "zsh /home/boj/.config/sway/notify-volume.sh mutemic"
+bindsym XF86MonBrightnessDown exec "zsh /home/boj/.config/sway/notify-brightness.sh down"
+bindsym XF86MonBrightnessUp exec "zsh /home/boj/.config/sway/notify-brightness.sh up"
+bindsym --locked XF86AudioPlay exec "zsh /home/boj/.config/sway/keybinds-spotify.sh toggle"
+bindsym XF86AudioNext exec "zsh /home/boj/.config/sway/keybinds-spotify.sh next"
+bindsym XF86AudioPrev exec "zsh /home/boj/.config/sway/keybinds-spotify.sh previous"
+bindsym $mod+p exec grim -g "$(slurp -d)" - | wl-copy -t image/png
+bindsym XF86TouchpadToggle input type:touchpad events toggle
+
+# Layouts
+default_border pixel 2
+gaps inner 15
+gaps outer 10
+smart_gaps off
+smart_borders no_gaps
+
+for_window [class="discord"] move to workspace 9
+for_window [class="Spotify"] move to workspace 9
+for_window [title="feh"] floating enable
+for_window [title="feh"] resize set 1000 800
+for_window [app_id="thunar"] floating enable
+for_window [app_id="thunar"] resize set 1000 800
+#for_window [title="Bluetooth.*"] floating enable
+#for_window [title="Bluetooth.*"] resize set 600 400
+
+for_window [app_id=".*"] opacity 1
+for_window [app_id="Alacritty"] opacity 0.95
+for_window [class="Code"] opacity 0.99

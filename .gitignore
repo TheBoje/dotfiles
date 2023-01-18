@@ -1,0 +1,11 @@
+/*
+!.gitignore
+!/kitty/
+!code-flags.conf
+!mako/
+!nvim/
+nvim/plugged/
+nvim/plugin/
+!sway/
+!waybar/
+!dotfiles.sh
