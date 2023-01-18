@@ -43,6 +43,8 @@ use { -- Additional text objects via treesitter
 after = 'nvim-treesitter',
   }
 
+use 'luk400/vim-jukit'
+
   -- Git related plugins
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
