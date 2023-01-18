@@ -1,0 +1,22 @@
+#
+# This file is parsed by pam_env module
+#
+# Syntax: simple "KEY=VAL" pairs on separate lines
+#
+GMB_BACKEND=nvidia-drm
+__GLX_VENDOR_LIBRARY_NAME=nvidia
+MOZ_ENABLE_WAYLAND=1
+MOZ_WEBRENDER=1
+QT_QPA_PLATFORM=wayland
+#LIBVA_DRIVER_NAME=i965
+LIBVA_DRIVER_NAME=iHD
+VDPAU_DRIVER=va_gl
+XDG_SESSION_TYPE=wayland
+QT_WAYLAND_FORCE_DPI=physical
+ECORE_EVAS_ENGINE=wayland_egl
+ELM_ENGINE=wayland_egl
+SDL_VIDEODRIVER=wayland
+_JAVA_AWT_WM_NONREPARENTING=1
+XDG_CURRENT_DESKTOP=sway
+QT_QPA_PLATFORMTHEME=qt5ct
+GTK_THEME=Adwaita:dark

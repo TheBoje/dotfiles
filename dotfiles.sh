@@ -21,7 +21,11 @@ function installDotfiles {
 		echo -e "Installing NVIDIA environment variable to /etc/environment..."
 		ln -s $PWD/environment/nvidia /etc/environment
 		echo -e "Installing NVIDIA environment done."
+	else
+		# TODO: Add AMD environment variables in environment/amd.
+		echo -e "${RED}AMD environment variable unavailable yet.$OFF"
 	fi
+	
 }
 
 function backupDotfiles {

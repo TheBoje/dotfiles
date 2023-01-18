@@ -2,6 +2,7 @@
 !.gitignore
 !/kitty/
 !code-flags.conf
+!environment/
 !mako/
 !nvim/
 nvim/plugged/
