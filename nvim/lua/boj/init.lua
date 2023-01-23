@@ -43,7 +43,34 @@ use { -- Additional text objects via treesitter
 after = 'nvim-treesitter',
   }
 
-use 'luk400/vim-jukit'
+-- Tree file explorer
+use {
+  'nvim-tree/nvim-tree.lua',
+  requires = {
+    'nvim-tree/nvim-web-devicons', -- optional, for file icons
+  },
+  tag = 'nightly' -- optional, updated every week. (see issue #1193)
+}
+require("nvim-tree").setup()
+
+use {
+	"windwp/nvim-autopairs",
+    config = function() require("nvim-autopairs").setup {} end
+}
+
+-- display image in vim
+-- use {'edluffy/hologram.nvim'}
+-- require('hologram').setup{
+--     auto_display = true -- WIP automatic markdown image display, may be prone to breaking
+-- }
+
+-- buffers as tab
+use {'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons'}
+vim.opt.termguicolors = true
+require("bufferline").setup{}
+
+-- jupyter notebook
+-- use 'luk400/vim-jukit'
 
   -- Git related plugins
   use 'tpope/vim-fugitive'
@@ -121,6 +148,54 @@ use 'luk400/vim-jukit'
       }
     end
   }
+
+use({
+  "utilyre/barbecue.nvim",
+  tag = "*",
+  requires = {
+    "neovim/nvim-lspconfig",
+    "SmiteshP/nvim-navic",
+    "nvim-tree/nvim-web-devicons", -- optional dependency
+  },
+  after = "nvim-web-devicons", -- keep this if you're using NvChad
+  config = function()
+    require("barbecue").setup({
+      attach_navic = false,
+    })
+  end,
+})
+
+require("nvim-navic").setup({
+  icons = {
+    File = ' ',
+    Module = ' ',
+    Namespace = ' ',
+    Package = ' ',
+    Class = ' ',
+    Method = ' ',
+    Property = ' ',
+    Field = ' ',
+    Constructor = ' ',
+    Enum = ' ',
+    Interface = ' ',
+    Function = ' ',
+    Variable = ' ',
+    Constant = ' ',
+    String = ' ',
+    Number = ' ',
+    Boolean = ' ',
+    Array = ' ',
+    Object = ' ',
+    Key = ' ',
+    Null = ' ',
+    EnumMember = ' ',
+    Struct = ' ',
+    Event = ' ',
+    Operator = ' ',
+    TypeParameter = ' '
+  }
+})
+
 
   use 'navarasu/onedark.nvim' -- Theme inspired by Atom
   use 'nvim-lualine/lualine.nvim' -- Fancier statusline
@@ -362,7 +437,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
-local on_attach = function(_, bufnr)
+local on_attach = function(client, bufnr)
   -- NOTE: Remember that lua is a real programming language, and as such it is possible
   -- to define small helper and utility functions so you don't have to repeat yourself
   -- many times.
@@ -376,6 +451,10 @@ local on_attach = function(_, bufnr)
 
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
+  if client.server_capabilities["documentSymbolProvider"] then
+      require("nvim-navic").attach(client, bufnr)
+  end
+
 
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
@@ -414,6 +493,7 @@ local servers = {
   cmake = {},
   clangd = {
     checkUpdate = true,
+    arguments = {"-j 8"},
   },
   -- gopls = {},
   -- pyright = {},
@@ -422,6 +502,20 @@ local servers = {
   bashls = {
     bashIde = {
       highlightParsingErrors = true,
+    },
+  },
+  pylsp = {
+    plugins = {
+      rope_autoimport = {
+        enabled = true,
+      },
+      report_completion = {
+        eager = true,
+        enabled = true,
+      },
+      pyling = {
+        enabled = true
+      },
     },
   },
   sumneko_lua = {

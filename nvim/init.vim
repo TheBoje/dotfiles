@@ -56,6 +56,7 @@ let g:jukit_output_new_os_window = 1
 "    - If set to 1, opens output split in new os-window. Can be used to e.g. write code in one kitty-os-window on your primary monitor while sending code to the shell which is in a seperate kitty-os-window on another monitor.
 let g:jukit_outhist_new_os_window = 1
 "    - Same as `g:jukit_output_new_os_window`, only for output-history-split
+let g:airline#extensions#tabline#enabled = 0
 
 lua require('boj')
 
