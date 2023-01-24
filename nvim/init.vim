@@ -32,24 +32,18 @@ au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhitespace /\s\+$/
 au BufWinLeave * call clearmatches()
 
-call plug#begin('~/.config/nvim/plugged')
+" call plug#begin('~/.config/nvim/plugged')
 
-Plug 'arcticicestudio/nord-vim'
-Plug 'nvim-lualine/lualine.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
-Plug 'lewis6991/gitsigns.nvim'
-Plug 'neovim/nvim-lspconfig'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'arcticicestudio/nord-vim'
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
-call plug#end()
+" call plug#end()
 
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-colorscheme nord
+" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+"                  \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
 set background=dark
-
 let mapleader=";"
 
 let g:jukit_output_new_os_window = 1
@@ -59,4 +53,3 @@ let g:jukit_outhist_new_os_window = 1
 let g:airline#extensions#tabline#enabled = 0
 
 lua require('boj')
-

@@ -12,65 +12,74 @@ require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   use { -- LSP Configuration & Plugins
-  'neovim/nvim-lspconfig',
-  requires = {
-    -- Automatically install LSPs to stdpath for neovim
-    'williamboman/mason.nvim',
-    'williamboman/mason-lspconfig.nvim',
+    'neovim/nvim-lspconfig',
+    requires = {
+      -- Automatically install LSPs to stdpath for neovim
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
 
-    -- Useful status updates for LSP
-    'j-hui/fidget.nvim',
+      -- Useful status updates for LSP
+      'j-hui/fidget.nvim',
 
-    -- Additional lua configuration, makes nvim stuff amazing
-    'folke/neodev.nvim',
-  },
-}
+      -- Additional lua configuration, makes nvim stuff amazing
+      'folke/neodev.nvim',
+    },
+  }
 
-use { -- Autocompletion
-'hrsh7th/nvim-cmp',
-requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+  --require("packer").init({
+  --  clone_timeout = 180,
+  --})
+
+  use "lukas-reineke/lsp-format.nvim"
+  require("lsp-format").setup {}
+
+  use { -- Autocompletion
+    'hrsh7th/nvim-cmp',
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
   }
 
   use { -- Highlight, edit, and navigate code
-  'nvim-treesitter/nvim-treesitter',
-  run = function()
-    pcall(require('nvim-treesitter.install').update { with_sync = true })
-  end,
-}
-
-use { -- Additional text objects via treesitter
-'nvim-treesitter/nvim-treesitter-textobjects',
-after = 'nvim-treesitter',
+    'nvim-treesitter/nvim-treesitter',
+    run = function()
+      pcall(require('nvim-treesitter.install').update { with_sync = true })
+    end,
   }
 
--- Tree file explorer
-use {
-  'nvim-tree/nvim-tree.lua',
-  requires = {
-    'nvim-tree/nvim-web-devicons', -- optional, for file icons
-  },
-  tag = 'nightly' -- optional, updated every week. (see issue #1193)
-}
-require("nvim-tree").setup()
+  use 'nvim-treesitter/nvim-treesitter-context'
 
-use {
-	"windwp/nvim-autopairs",
+  use { -- Additional text objects via treesitter
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    after = 'nvim-treesitter',
+  }
+
+  -- Tree file explorer
+  use {
+    'nvim-tree/nvim-tree.lua',
+    requires = {
+      'nvim-tree/nvim-web-devicons', -- optional, for file icons
+    },
+    tag = 'nightly' -- optional, updated every week. (see issue #1193)
+  }
+  require("nvim-tree").setup()
+
+  use {
+    "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
-}
+  }
 
--- display image in vim
--- use {'edluffy/hologram.nvim'}
--- require('hologram').setup{
---     auto_display = true -- WIP automatic markdown image display, may be prone to breaking
--- }
+  -- display image in vim
+  -- use {'edluffy/hologram.nvim'}
+  -- require('hologram').setup{
+  --     auto_display = true -- WIP automatic markdown image display, may be prone to breaking
+  -- }
 
--- buffers as tab
-use {'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons'}
-vim.opt.termguicolors = true
-require("bufferline").setup{}
+  -- buffers as tab
+  use { 'akinsho/bufferline.nvim', tag = "v3.*", requires = 'nvim-tree/nvim-web-devicons' }
+  vim.opt.termguicolors = true
+  require("bufferline").setup {}
 
--- jupyter notebook
--- use 'luk400/vim-jukit'
+  -- jupyter notebook
+  -- use 'luk400/vim-jukit'
 
   -- Git related plugins
   use 'tpope/vim-fugitive'
@@ -81,7 +90,7 @@ require("bufferline").setup{}
   use "nvim-lua/plenary.nvim"
   use {
     "folke/todo-comments.nvim",
-    requires = {"nvim-lua/plenary.nvim"},
+    requires = { "nvim-lua/plenary.nvim" },
     config = function()
       require("todo-comments").setup {
         signs = true, -- show icons in the signs column
@@ -149,52 +158,52 @@ require("bufferline").setup{}
     end
   }
 
-use({
-  "utilyre/barbecue.nvim",
-  tag = "*",
-  requires = {
-    "neovim/nvim-lspconfig",
-    "SmiteshP/nvim-navic",
-    "nvim-tree/nvim-web-devicons", -- optional dependency
-  },
-  after = "nvim-web-devicons", -- keep this if you're using NvChad
-  config = function()
-    require("barbecue").setup({
-      attach_navic = false,
-    })
-  end,
-})
+  use({
+    "utilyre/barbecue.nvim",
+    tag = "*",
+    requires = {
+      "neovim/nvim-lspconfig",
+      "SmiteshP/nvim-navic",
+      "nvim-tree/nvim-web-devicons", -- optional dependency
+    },
+    after = "nvim-web-devicons", -- keep this if you're using NvChad
+    config = function()
+      require("barbecue").setup({
+        attach_navic = false,
+      })
+    end,
+  })
 
-require("nvim-navic").setup({
-  icons = {
-    File = ' ',
-    Module = ' ',
-    Namespace = ' ',
-    Package = ' ',
-    Class = ' ',
-    Method = ' ',
-    Property = ' ',
-    Field = ' ',
-    Constructor = ' ',
-    Enum = ' ',
-    Interface = ' ',
-    Function = ' ',
-    Variable = ' ',
-    Constant = ' ',
-    String = ' ',
-    Number = ' ',
-    Boolean = ' ',
-    Array = ' ',
-    Object = ' ',
-    Key = ' ',
-    Null = ' ',
-    EnumMember = ' ',
-    Struct = ' ',
-    Event = ' ',
-    Operator = ' ',
-    TypeParameter = ' '
-  }
-})
+  require("nvim-navic").setup({
+    icons = {
+      File = ' ',
+      Module = ' ',
+      Namespace = ' ',
+      Package = ' ',
+      Class = ' ',
+      Method = ' ',
+      Property = ' ',
+      Field = ' ',
+      Constructor = ' ',
+      Enum = ' ',
+      Interface = ' ',
+      Function = ' ',
+      Variable = ' ',
+      Constant = ' ',
+      String = ' ',
+      Number = ' ',
+      Boolean = ' ',
+      Array = ' ',
+      Object = ' ',
+      Key = ' ',
+      Null = ' ',
+      EnumMember = ' ',
+      Struct = ' ',
+      Event = ' ',
+      Operator = ' ',
+      TypeParameter = ' '
+    }
+  })
 
 
   use 'navarasu/onedark.nvim' -- Theme inspired by Atom
@@ -452,10 +461,10 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
   end
   if client.server_capabilities["documentSymbolProvider"] then
-      require("nvim-navic").attach(client, bufnr)
+    require("nvim-navic").attach(client, bufnr)
   end
 
-
+  require("lsp-format").on_attach(client)
   nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
   nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
@@ -493,12 +502,8 @@ local servers = {
   cmake = {},
   clangd = {
     checkUpdate = true,
-    arguments = {"-j 8"},
+    arguments = { "-j 8" },
   },
-  -- gopls = {},
-  -- pyright = {},
-  -- rust_analyzer = {},
-  -- tsserver = {},
   bashls = {
     bashIde = {
       highlightParsingErrors = true,
@@ -520,7 +525,7 @@ local servers = {
   },
   sumneko_lua = {
     Lua = {
-      codeLens = { enable = true},
+      codeLens = { enable = true },
       workspace = { checkThirdParty = false },
       telemetry = { enable = false },
     },
@@ -602,7 +607,3 @@ cmp.setup {
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
-
-require('boj/lualine')
-require('boj/gitsigns')
-
