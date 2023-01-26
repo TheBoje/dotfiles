@@ -60,8 +60,9 @@ require('packer').startup(function(use)
     },
     tag = 'nightly' -- optional, updated every week. (see issue #1193)
   }
-  require("nvim-tree").setup()
-
+  require("nvim-tree").setup {
+    vim.api.nvim_set_keymap('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+  }
   use {
     "windwp/nvim-autopairs",
     config = function() require("nvim-autopairs").setup {} end
@@ -79,7 +80,7 @@ require('packer').startup(function(use)
   require("bufferline").setup {}
 
   -- jupyter notebook
-  -- use 'luk400/vim-jukit'
+  use 'luk400/vim-jukit'
 
   -- Git related plugins
   use 'tpope/vim-fugitive'
