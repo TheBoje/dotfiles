@@ -12,14 +12,16 @@ require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   use { -- LSP Configuration & Plugins
-    'neovim/nvim-lspconfig',
+    'junnplus/lsp-setup.nvim',
     requires = {
       -- Automatically install LSPs to stdpath for neovim
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
-
+      'neovim/nvim-lspconfig',
+      'p00f/clangd_extensions.nvim',
       -- Useful status updates for LSP
       'j-hui/fidget.nvim',
+      'nvim-lua/lsp-status.nvim',
 
       -- Additional lua configuration, makes nvim stuff amazing
       'folke/neodev.nvim',
@@ -35,7 +37,7 @@ require('packer').startup(function(use)
 
   use { -- Autocompletion
     'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip' },
+    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-path' },
   }
 
   use { -- Highlight, edit, and navigate code
@@ -86,6 +88,12 @@ require('packer').startup(function(use)
   use 'tpope/vim-fugitive'
   use 'tpope/vim-rhubarb'
   use 'lewis6991/gitsigns.nvim'
+
+  use { 'kevinhwang91/nvim-bqf', ft = 'qf' }
+
+  use { 'akinsho/git-conflict.nvim', tag = "*", config = function()
+    require('git-conflict').setup()
+  end }
 
   -- Highlight TODOs
   use "nvim-lua/plenary.nvim"
@@ -501,10 +509,10 @@ end
 --  the `settings` field of the server config. You must look up that documentation yourself.
 local servers = {
   cmake = {},
-  clangd = {
-    checkUpdate = true,
-    arguments = { "-j 8" },
-  },
+  -- clangd = {
+  --   checkUpdate = true,
+  --   arguments = { "-j 8" },
+  -- },
   bashls = {
     bashIde = {
       highlightParsingErrors = true,
@@ -558,10 +566,99 @@ mason_lspconfig.setup_handlers {
       settings = servers[server_name],
     }
   end,
+  -- require('lspconfig')['clangd'].setup {
+  --   on_attach = on_attach,
+  --   capabilities = capabilities,
+  --   settings = servers['clangd'],
+  --   init_options = {
+  --     usePlaceholders = true,
+  --     completeUnimported = true,
+  --     clangdFileStatus = true
+  --   }
+  -- }
+  require('lsp-setup').setup({
+    handlers = require('lsp-status').extensions.clangd.setup(),
+    init_options = {
+      clangdFileStatus = true
+    },
+    on_attach = require('lsp-status').on_attach,
+    capabilities = require('lsp-status').capabilities
+  })
 }
 
--- Turn on lsp status information
-require('fidget').setup()
+require("clangd_extensions").setup {
+  server = {
+    -- options to pass to nvim-lspconfig
+    -- i.e. the arguments to require("lspconfig").clangd.setup({})
+  },
+  extensions = {
+    -- defaults:
+    -- Automatically set inlay hints (type hints)
+    autoSetHints = true,
+    -- These apply to the default ClangdSetInlayHints command
+    inlay_hints = {
+      -- Only show inlay hints for the current line
+      only_current_line = false,
+      -- Event which triggers a refersh of the inlay hints.
+      -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
+      -- not that this may cause  higher CPU usage.
+      -- This option is only respected when only_current_line and
+      -- autoSetHints both are true.
+      only_current_line_autocmd = "CursorHold",
+      -- whether to show parameter hints with the inlay hints or not
+      show_parameter_hints = true,
+      -- prefix for parameter hints
+      parameter_hints_prefix = "<- ",
+      -- prefix for all the other hints (type, chaining)
+      other_hints_prefix = "=> ",
+      -- whether to align to the length of the longest line in the file
+      max_len_align = false,
+      -- padding from the left if max_len_align is true
+      max_len_align_padding = 1,
+      -- whether to align to the extreme right or not
+      right_align = false,
+      -- padding from the right if right_align is true
+      right_align_padding = 7,
+      -- The color of the hints
+      highlight = "Comment",
+      -- The highlight group priority for extmark
+      priority = 100,
+    },
+    ast = {
+      -- These are unicode, should be available in any font
+      role_icons = {
+        type = "",
+        declaration = "",
+        expression = "",
+        specifier = "",
+        statement = "",
+        ["template argument"] = "",
+      },
+
+      kind_icons = {
+        Compound = "",
+        Recovery = "",
+        TranslationUnit = "",
+        PackExpansion = "",
+        TemplateTypeParm = "",
+        TemplateTemplateParm = "",
+        TemplateParamObject = "",
+      },
+
+      highlights = {
+        detail = "Comment",
+      },
+    },
+    memory_usage = {
+      border = "none",
+    },
+    symbol_info = {
+      border = "none",
+    },
+  },
+}
+
+
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
@@ -572,6 +669,18 @@ cmp.setup {
     expand = function(args)
       luasnip.lsp_expand(args.body)
     end,
+  },
+  sorting = {
+    comparators = {
+      cmp.config.compare.offset,
+      cmp.config.compare.exact,
+      cmp.config.compare.recently_used,
+      require("clangd_extensions.cmp_scores"),
+      cmp.config.compare.kind,
+      cmp.config.compare.sort_text,
+      cmp.config.compare.length,
+      cmp.config.compare.order,
+    },
   },
   mapping = cmp.mapping.preset.insert {
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
@@ -601,10 +710,12 @@ cmp.setup {
     end, { 'i', 's' }),
   },
   sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
+    { name = 'path' },
+    { name = 'nvim_lsp', keyword_length = 1 },
+    { name = 'buffer', keyword_length = 1 },
+    { name = 'luasnip', keyword_length = 1 },
   },
 }
 
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
+-- Turn on lsp status information
+require('fidget').setup()
