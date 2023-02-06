@@ -27,8 +27,8 @@ output "eDP-1" {
 output "HDMI-A-1" {
 	mode  1920x1080@74.986Hz
 	pos 4000 0
-	transform normal
-	#transform 270
+	# transform normal
+	transform 270
 	scale 1.0
 	scale_filter smart
 	adaptive_sync on

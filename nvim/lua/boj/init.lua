@@ -12,23 +12,23 @@ require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
 
   use { -- LSP Configuration & Plugins
-    'junnplus/lsp-setup.nvim',
-    requires = {
-      -- Automatically install LSPs to stdpath for neovim
-      'williamboman/mason.nvim',
-      'williamboman/mason-lspconfig.nvim',
-      'neovim/nvim-lspconfig',
-      'p00f/clangd_extensions.nvim',
-      -- Useful status updates for LSP
-      'j-hui/fidget.nvim',
-      'nvim-lua/lsp-status.nvim',
+  'junnplus/lsp-setup.nvim',
+  requires = {
+    -- Automatically install LSPs to stdpath for neovim
+    'williamboman/mason.nvim',
+    'williamboman/mason-lspconfig.nvim',
+    'neovim/nvim-lspconfig',
+    'p00f/clangd_extensions.nvim',
+    -- Useful status updates for LSP
+    'j-hui/fidget.nvim',
+    'nvim-lua/lsp-status.nvim',
 
-      -- Additional lua configuration, makes nvim stuff amazing
-      'folke/neodev.nvim',
-    },
-  }
+    -- Additional lua configuration, makes nvim stuff amazing
+    'folke/neodev.nvim',
+  },
+}
 
-  --require("packer").init({
+--require("packer").init({
   --  clone_timeout = 180,
   --})
 
@@ -36,43 +36,43 @@ require('packer').startup(function(use)
   require("lsp-format").setup {}
 
   use { -- Autocompletion
-    'hrsh7th/nvim-cmp',
-    requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-path' },
-  }
+  'hrsh7th/nvim-cmp',
+  requires = { 'hrsh7th/cmp-nvim-lsp', 'L3MON4D3/LuaSnip', 'saadparwaiz1/cmp_luasnip', 'hrsh7th/cmp-path' },
+}
 
-  use { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    run = function()
-      pcall(require('nvim-treesitter.install').update { with_sync = true })
-    end,
+use { -- Highlight, edit, and navigate code
+'nvim-treesitter/nvim-treesitter',
+run = function()
+  pcall(require('nvim-treesitter.install').update { with_sync = true })
+end,
   }
 
   use 'nvim-treesitter/nvim-treesitter-context'
 
   use { -- Additional text objects via treesitter
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    after = 'nvim-treesitter',
-  }
+  'nvim-treesitter/nvim-treesitter-textobjects',
+  after = 'nvim-treesitter',
+}
 
-  -- Tree file explorer
-  use {
-    'nvim-tree/nvim-tree.lua',
-    requires = {
-      'nvim-tree/nvim-web-devicons', -- optional, for file icons
-    },
-    tag = 'nightly' -- optional, updated every week. (see issue #1193)
-  }
-  require("nvim-tree").setup {
-    vim.api.nvim_set_keymap('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
-  }
-  use {
-    "windwp/nvim-autopairs",
-    config = function() require("nvim-autopairs").setup {} end
-  }
+-- Tree file explorer
+use {
+  'nvim-tree/nvim-tree.lua',
+  requires = {
+    'nvim-tree/nvim-web-devicons', -- optional, for file icons
+  },
+  tag = 'nightly' -- optional, updated every week. (see issue #1193)
+}
+require("nvim-tree").setup {
+  vim.api.nvim_set_keymap('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+}
+use {
+  "windwp/nvim-autopairs",
+  config = function() require("nvim-autopairs").setup {} end
+}
 
-  -- display image in vim
-  -- use {'edluffy/hologram.nvim'}
-  -- require('hologram').setup{
+-- display image in vim
+-- use {'edluffy/hologram.nvim'}
+-- require('hologram').setup{
   --     auto_display = true -- WIP automatic markdown image display, may be prone to breaking
   -- }
 
@@ -82,7 +82,7 @@ require('packer').startup(function(use)
   require("bufferline").setup {}
 
   -- jupyter notebook
-  use 'luk400/vim-jukit'
+  -- use 'luk400/vim-jukit'
 
   -- Git related plugins
   use 'tpope/vim-fugitive'
@@ -94,6 +94,12 @@ require('packer').startup(function(use)
   use { 'akinsho/git-conflict.nvim', tag = "*", config = function()
     require('git-conflict').setup()
   end }
+
+  -- Markdown renderer
+  use({
+    "iamcco/markdown-preview.nvim",
+    run = function() vim.fn["mkdp#util#install"]() end,
+  })
 
   -- Highlight TODOs
   use "nvim-lua/plenary.nvim"
@@ -450,8 +456,9 @@ require('nvim-treesitter.configs').setup {
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
+vim.keymap.set('n', '<leader>f', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+-- vim.keymap.set('n', '<leader>i', vim.diagnostic.show_line_diagnostics)
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
@@ -510,212 +517,212 @@ end
 local servers = {
   cmake = {},
   -- clangd = {
-  --   checkUpdate = true,
-  --   arguments = { "-j 8" },
-  -- },
-  bashls = {
-    bashIde = {
-      highlightParsingErrors = true,
-    },
-  },
-  pylsp = {
-    plugins = {
-      rope_autoimport = {
-        enabled = true,
-      },
-      report_completion = {
-        eager = true,
-        enabled = true,
-      },
-      pyling = {
-        enabled = true
+    --   checkUpdate = true,
+    --   arguments = { "-j 8" },
+    -- },
+    bashls = {
+      bashIde = {
+        highlightParsingErrors = true,
       },
     },
-  },
-  sumneko_lua = {
-    Lua = {
-      codeLens = { enable = true },
-      workspace = { checkThirdParty = false },
-      telemetry = { enable = false },
-    },
-  },
-}
-
--- Setup neovim lua configuration
-require('neodev').setup()
---
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
--- Setup mason so it can manage external tooling
-require('mason').setup()
-
--- Ensure the servers above are installed
-local mason_lspconfig = require 'mason-lspconfig'
-
-mason_lspconfig.setup {
-  ensure_installed = vim.tbl_keys(servers),
-}
-
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-      settings = servers[server_name],
-    }
-  end,
-  -- require('lspconfig')['clangd'].setup {
-  --   on_attach = on_attach,
-  --   capabilities = capabilities,
-  --   settings = servers['clangd'],
-  --   init_options = {
-  --     usePlaceholders = true,
-  --     completeUnimported = true,
-  --     clangdFileStatus = true
-  --   }
-  -- }
-  require('lsp-setup').setup({
-    handlers = require('lsp-status').extensions.clangd.setup(),
-    init_options = {
-      clangdFileStatus = true
-    },
-    on_attach = require('lsp-status').on_attach,
-    capabilities = require('lsp-status').capabilities
-  })
-}
-
-require("clangd_extensions").setup {
-  server = {
-    -- options to pass to nvim-lspconfig
-    -- i.e. the arguments to require("lspconfig").clangd.setup({})
-  },
-  extensions = {
-    -- defaults:
-    -- Automatically set inlay hints (type hints)
-    autoSetHints = true,
-    -- These apply to the default ClangdSetInlayHints command
-    inlay_hints = {
-      -- Only show inlay hints for the current line
-      only_current_line = false,
-      -- Event which triggers a refersh of the inlay hints.
-      -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
-      -- not that this may cause  higher CPU usage.
-      -- This option is only respected when only_current_line and
-      -- autoSetHints both are true.
-      only_current_line_autocmd = "CursorHold",
-      -- whether to show parameter hints with the inlay hints or not
-      show_parameter_hints = true,
-      -- prefix for parameter hints
-      parameter_hints_prefix = "<- ",
-      -- prefix for all the other hints (type, chaining)
-      other_hints_prefix = "=> ",
-      -- whether to align to the length of the longest line in the file
-      max_len_align = false,
-      -- padding from the left if max_len_align is true
-      max_len_align_padding = 1,
-      -- whether to align to the extreme right or not
-      right_align = false,
-      -- padding from the right if right_align is true
-      right_align_padding = 7,
-      -- The color of the hints
-      highlight = "Comment",
-      -- The highlight group priority for extmark
-      priority = 100,
-    },
-    ast = {
-      -- These are unicode, should be available in any font
-      role_icons = {
-        type = "",
-        declaration = "",
-        expression = "",
-        specifier = "",
-        statement = "",
-        ["template argument"] = "",
-      },
-
-      kind_icons = {
-        Compound = "",
-        Recovery = "",
-        TranslationUnit = "",
-        PackExpansion = "",
-        TemplateTypeParm = "",
-        TemplateTemplateParm = "",
-        TemplateParamObject = "",
-      },
-
-      highlights = {
-        detail = "Comment",
+    pylsp = {
+      plugins = {
+        rope_autoimport = {
+          enabled = true,
+        },
+        report_completion = {
+          eager = true,
+          enabled = true,
+        },
+        pyling = {
+          enabled = true
+        },
       },
     },
-    memory_usage = {
-      border = "none",
+    sumneko_lua = {
+      Lua = {
+        codeLens = { enable = true },
+        workspace = { checkThirdParty = false },
+        telemetry = { enable = false },
+      },
     },
-    symbol_info = {
-      border = "none",
-    },
-  },
-}
+  }
 
+  -- Setup neovim lua configuration
+  require('neodev').setup()
+  --
+  -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
+  -- Setup mason so it can manage external tooling
+  require('mason').setup()
 
--- nvim-cmp setup
-local cmp = require 'cmp'
-local luasnip = require 'luasnip'
+  -- Ensure the servers above are installed
+  local mason_lspconfig = require 'mason-lspconfig'
 
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
+  mason_lspconfig.setup {
+    ensure_installed = vim.tbl_keys(servers),
+  }
+
+  mason_lspconfig.setup_handlers {
+    function(server_name)
+      require('lspconfig')[server_name].setup {
+        capabilities = capabilities,
+        on_attach = on_attach,
+        settings = servers[server_name],
+      }
     end,
-  },
-  sorting = {
-    comparators = {
-      cmp.config.compare.offset,
-      cmp.config.compare.exact,
-      cmp.config.compare.recently_used,
-      require("clangd_extensions.cmp_scores"),
-      cmp.config.compare.kind,
-      cmp.config.compare.sort_text,
-      cmp.config.compare.length,
-      cmp.config.compare.order,
-    },
-  },
-  mapping = cmp.mapping.preset.insert {
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  },
-  sources = {
-    { name = 'path' },
-    { name = 'nvim_lsp', keyword_length = 1 },
-    { name = 'buffer', keyword_length = 1 },
-    { name = 'luasnip', keyword_length = 1 },
-  },
-}
+    -- require('lspconfig')['clangd'].setup {
+      --   on_attach = on_attach,
+      --   capabilities = capabilities,
+      --   settings = servers['clangd'],
+      --   init_options = {
+        --     usePlaceholders = true,
+        --     completeUnimported = true,
+        --     clangdFileStatus = true
+        --   }
+        -- }
+        require('lsp-setup').setup({
+          handlers = require('lsp-status').extensions.clangd.setup(),
+          init_options = {
+            clangdFileStatus = true
+          },
+          on_attach = require('lsp-status').on_attach,
+          capabilities = require('lsp-status').capabilities
+        })
+      }
 
--- Turn on lsp status information
-require('fidget').setup()
+      require("clangd_extensions").setup {
+        server = {
+          -- options to pass to nvim-lspconfig
+          -- i.e. the arguments to require("lspconfig").clangd.setup({})
+        },
+        extensions = {
+          -- defaults:
+          -- Automatically set inlay hints (type hints)
+          autoSetHints = true,
+          -- These apply to the default ClangdSetInlayHints command
+          inlay_hints = {
+            -- Only show inlay hints for the current line
+            only_current_line = false,
+            -- Event which triggers a refersh of the inlay hints.
+            -- You can make this "CursorMoved" or "CursorMoved,CursorMovedI" but
+            -- not that this may cause  higher CPU usage.
+            -- This option is only respected when only_current_line and
+            -- autoSetHints both are true.
+            only_current_line_autocmd = "CursorHold",
+            -- whether to show parameter hints with the inlay hints or not
+            show_parameter_hints = true,
+            -- prefix for parameter hints
+            parameter_hints_prefix = "<- ",
+            -- prefix for all the other hints (type, chaining)
+            other_hints_prefix = "=> ",
+            -- whether to align to the length of the longest line in the file
+            max_len_align = false,
+            -- padding from the left if max_len_align is true
+            max_len_align_padding = 1,
+            -- whether to align to the extreme right or not
+            right_align = false,
+            -- padding from the right if right_align is true
+            right_align_padding = 7,
+            -- The color of the hints
+            highlight = "Comment",
+            -- The highlight group priority for extmark
+            priority = 100,
+          },
+          ast = {
+            -- These are unicode, should be available in any font
+            role_icons = {
+              type = "",
+              declaration = "",
+              expression = "",
+              specifier = "",
+              statement = "",
+              ["template argument"] = "",
+            },
+
+            kind_icons = {
+              Compound = "",
+              Recovery = "",
+              TranslationUnit = "",
+              PackExpansion = "",
+              TemplateTypeParm = "",
+              TemplateTemplateParm = "",
+              TemplateParamObject = "",
+            },
+
+            highlights = {
+              detail = "Comment",
+            },
+          },
+          memory_usage = {
+            border = "none",
+          },
+          symbol_info = {
+            border = "none",
+          },
+        },
+      }
+
+
+
+      -- nvim-cmp setup
+      local cmp = require 'cmp'
+      local luasnip = require 'luasnip'
+
+      cmp.setup {
+        snippet = {
+          expand = function(args)
+            luasnip.lsp_expand(args.body)
+          end,
+        },
+        sorting = {
+          comparators = {
+            cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            cmp.config.compare.recently_used,
+            require("clangd_extensions.cmp_scores"),
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+          },
+        },
+        mapping = cmp.mapping.preset.insert {
+          ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-f>'] = cmp.mapping.scroll_docs(4),
+          ['<C-Space>'] = cmp.mapping.complete(),
+          ['<CR>'] = cmp.mapping.confirm {
+            behavior = cmp.ConfirmBehavior.Replace,
+            select = true,
+          },
+          ['<Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_next_item()
+            elseif luasnip.expand_or_jumpable() then
+              luasnip.expand_or_jump()
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+          ['<S-Tab>'] = cmp.mapping(function(fallback)
+            if cmp.visible() then
+              cmp.select_prev_item()
+            elseif luasnip.jumpable(-1) then
+              luasnip.jump(-1)
+            else
+              fallback()
+            end
+          end, { 'i', 's' }),
+        },
+        sources = {
+          { name = 'path' },
+          { name = 'nvim_lsp', keyword_length = 1 },
+          { name = 'buffer', keyword_length = 1 },
+          { name = 'luasnip', keyword_length = 1 },
+        },
+      }
+
+      -- Turn on lsp status information
+      require('fidget').setup()
