@@ -14,9 +14,9 @@ function send_notification {
     # send the notification
     if [ $volume != "muted" ]
     then
-        notify-send -u normal "volume $volume" -h int:value:"$volume" -h string:synchronous:volume
+	notify-send -u normal "volume $volume" -h int:value:"$volume" -h string:synchronous:volume
     else
-        notify-send -u normal "muted sound"
+	notify-send -u normal "muted sound"
     fi
 }
 
@@ -24,24 +24,24 @@ case $1 in
     up)
 	pactl set-sink-volume @DEFAULT_SINK@ +5% > /dev/null
 	send_notification
-    ;;
+	;;
     micup)
-    pactl set-source-volume @DEFAULT_SOURCE@ +5% > /dev/null
-    ;;
+	pactl set-source-volume @DEFAULT_SOURCE@ +5% > /dev/null
+	;;
     down)
 	pactl set-sink-volume @DEFAULT_SINK@ -5% > /dev/null
 	send_notification
 	;;
     micdown)
-    pactl set-source-volume @DEFAULT_SOURCE@ -5% > /dev/null
-    ;;
+	pactl set-source-volume @DEFAULT_SOURCE@ -5% > /dev/null
+	;;
     muteaudio)
-    pactl set-sink-mute @DEFAULT_SINK@ toggle > /dev/null
-    send_notification
-    ;;
+	pactl set-sink-mute @DEFAULT_SINK@ toggle > /dev/null
+	send_notification
+	;;
     mutemic)
-    pactl set-source-mute @DEFAULT_SOURCE@ toggle > /dev/null
-    send_notification
-    ;;
+	pactl set-source-mute @DEFAULT_SOURCE@ toggle > /dev/null
+	send_notification
+	;;
 esac
 
