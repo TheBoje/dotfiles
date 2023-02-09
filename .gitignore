@@ -9,4 +9,5 @@ nvim/plugged/
 nvim/plugin/
 !sway/
 !waybar/
+!zsh/
 !dotfiles.sh
