@@ -59,6 +59,8 @@ fi
 export XDG_DATA_HOME=$HOME/.local/share
 export XDG_STATE_HOME=$HOME/.local/state
 export XDG_CACHE_HOME=$HOME/.cache
+export AndroidSdkDirectory=/home/boj/Android/Sdk/
+
 #export GNUPGHOME=$XDG_DATA_HOME/gnupg
 #export LESSHISTFILE=$XDG_CACHE_HOME/less/history
 alias wget=wget --hsts-file="$XDG_CONFIG_HOME/wget-hsts"

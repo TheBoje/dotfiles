@@ -5,13 +5,11 @@ set $term kitty
 set $browser firefox
 #set $menu dmenu_path | dmenu | xargs swaymsg exec --
 set $menu wofi --show=drun --lines=5 --prompt=""
-set $lock swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 5 --fade-in 0.5
-
+set $lock swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15--effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088--separator-color 00000000 --grace 5
 
 font "Cascadia Code" Medium 11
 
 ### Output configuration
-#output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
 output * max_render_time 5 bg /usr/share/backgrounds/sway/background.png fill
 
 output "eDP-1" {
@@ -25,10 +23,11 @@ output "eDP-1" {
 }
 
 output "HDMI-A-1" {
-	mode  1920x1080@74.986Hz
+	mode 1920x1080@74.986Hz
+	# mode 2560x1440
 	pos 4000 0
-	# transform normal
-	transform 270
+	transform normal
+	# transform 270
 	scale 1.0
 	scale_filter smart
 	adaptive_sync on
@@ -37,9 +36,8 @@ output "HDMI-A-1" {
 
 ### Idle configuration
 exec swayidle -w \
-    timeout 900 'swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 5 --fade-in 0.2' \
+    timeout 900 'swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15--effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088--separator-color 00000000 --grace 5' \
     timeout 2700 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
-    before-sleep 'swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15 --effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 5 --fade-in 0.2'
 
 ### Key bindings
 bindsym $mod+Return exec $term
@@ -167,7 +165,6 @@ input type:touchpad {
 # Keybinds
 # Apps
 #bindsym $mod+F2 exec brave --ignore-gpu-blocklist --enable-zero-copy --enable-features=VaapiVideoDecoder --enable-gpu --use-gl=egl --ozone-platform-hint=auto &
-#bindsym $mod+Ctrl+o exec electron15 --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WebRTCPipeWireCapturer --enable-features=VaapiVideoDecoder --use-angle=egl --enable-gpu /usr/lib/discord/app.asar &;exec spotify --disable-gpu &
 
 bindsym $mod+Ctrl+o exec discord --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-features=WebRTCPipeWireCapturer --enable-features=VaapiVideoDecoder --use-angle=egl --enable-gpu &; exec spotify --disable-gpu &
 
@@ -198,6 +195,8 @@ for_window [title="feh"] floating enable
 for_window [title="feh"] resize set 1000 800
 for_window [app_id="thunar"] floating enable
 for_window [app_id="thunar"] resize set 1000 800
+for_window [title="imguiboj*"] floating enable
+for_window [title="imguiboj*"] resize set 1000 800
 #for_window [title="Bluetooth.*"] floating enable
 #for_window [title="Bluetooth.*"] resize set 600 400
 
