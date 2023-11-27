@@ -11,14 +11,48 @@ for _, lsp in ipairs(servers) do
   }
 end
 
+
 local clangd_capabilities = capabilities
 clangd_capabilities.textDocument.semanticHighlighting = true
 clangd_capabilities.offsetEncoding = "utf-8"
 
+local utils = require "core.utils"
+
 lspconfig["clangd"].setup {
-  on_attach = on_attach,
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+
+    utils.load_mappings("lspconfig", { buffer = bufnr })
+
+    if client.server_capabilities.signatureHelpProvider then
+    require("nvchad.signature").setup(client)
+    end
+
+    if not utils.load_config().ui.lsp_semantic_tokens and client.supports_method "textDocument/semanticTokens" then
+    client.server_capabilities.semanticTokensProvider = nil
+    end
+    require("clangd_extensions.inlay_hints").setup_autocmd()
+    require("clangd_extensions.inlay_hints").set_inlay_hints()
+  end,
   capabilities = clangd_capabilities,
   cmd = {
-    "/u/opt3production/production.CentOS-7.4/Opt/P-20230605-Opt-22_0002_0008/bin/clangd", "--background-index", "--compile-commands-dir=./build/dev", "--all-scopes-completion", "--suggest-missing-includes", "-j=16", "--cross-file-rename" }
+    "clangd",
+    "--background-index",
+    "--background-index-priority=low",
+    "--include-cleaner-stdlib",
+    "-j=20",
+    "--query-driver='D:\\Perforce\\SDK\\llvm-project\\bin\\clang-tidy'",
+    "--clang-tidy",
+    "--compile-commands-dir=" .. vim.fn.getcwd(),
+    "--all-scopes-completion",
+    "--pch-storage=memory",
+    "--cross-file-rename",
+    "--completion-style=detailed",
+    "--header-insertion=iwyu",
+    "--header-insertion-decorators",
+    "--suggest-missing-includes",
+    "--log=verbose",
+  },
 }
-
