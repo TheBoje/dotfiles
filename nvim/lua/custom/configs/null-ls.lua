@@ -10,9 +10,12 @@ local sources = {
 
   lint.cmake_lint,
   lint.shellcheck,
+  -- lint.clang_check,
 }
 
 null_ls.setup {
   debug = true,
+  log_level = "trace",
   sources = sources,
+  root_dir = require("null-ls.utils").root_pattern(".null-ls-root", "__progen__"),
 }
