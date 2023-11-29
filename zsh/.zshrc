@@ -118,3 +118,5 @@ export GPG_TTY=$(tty)
 
 # opam configuration
 [[ ! -r /home/boj/.opam/opam-init/init.zsh ]] || source /home/boj/.opam/opam-init/init.zsh  > /dev/null 2> /dev/null
+
+[ -s "/usr/share/scm_breeze/scm_breeze.sh" ] && source "/usr/share/scm_breeze/scm_breeze.sh"
