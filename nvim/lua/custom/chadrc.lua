@@ -46,18 +46,18 @@ vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 
 -- Set default shell to powershell
-local powershell_options = {
-  shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
-  shellcmdflag = "-ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;", -- -NoLogo -NoProfile
-  shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
-  shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
-  shellquote = "",
-  shellxquote = "",
-}
+--local powershell_options = {
+--  shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
+--  shellcmdflag = "-ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;", -- -NoLogo -NoProfile
+--  shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+--  shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+--  shellquote = "",
+--  shellxquote = "",
+--}
 
-for option, value in pairs(powershell_options) do
-  vim.opt[option] = value
-end
+--for option, value in pairs(powershell_options) do
+--  vim.opt[option] = value
+--end
 
 
 M.plugins  = "custom.plugins"

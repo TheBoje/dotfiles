@@ -43,7 +43,7 @@ lspconfig["clangd"].setup {
     "--background-index-priority=low",
     "--include-cleaner-stdlib",
     "-j=20",
-    "--query-driver='D:\\Perforce\\SDK\\llvm-project\\bin\\clang-tidy'",
+    -- "--query-driver='D:\\Perforce\\SDK\\llvm-project\\bin\\clang-tidy'",
     "--clang-tidy",
     "--compile-commands-dir=" .. vim.fn.getcwd(),
     "--all-scopes-completion",

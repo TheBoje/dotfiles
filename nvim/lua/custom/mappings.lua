@@ -9,6 +9,7 @@ M.abc = {
     ["<leader>d]"] = {":lua vim.diagnostic.goto_next()<CR>", "Go to next diagnostic"},
     ["<leader>dd"] = {":Telescope diagnostics<CR>", "Open Telescope diagnostics list"},
     ["<C-tab>"] = { function() require("nvchad_ui.tabufline").tabuflinePrev() end, "Goto prev buffer"},
+    ["<leader>nf"] = {":lua require('neogen').generate()<CR>", "Generate doxygen comment"},
 
     -- DEBUGGER / NVIM DAP
     ["<leader>db"] = { "<cmd> DapToggleBreakpoint <CR>", "Add breakpoint at line"},

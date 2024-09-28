@@ -35,9 +35,9 @@ output "HDMI-A-1" {
 }
 
 ### Idle configuration
-exec swayidle -w \
-    timeout 900 'swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15--effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088--separator-color 00000000 --grace 5' \
-    timeout 2700 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
+#exec swayidle -w \
+#    timeout 900 'swaylock --screenshots --clock --indicator --indicator-radius 100 --indicator-thickness 7 --effect-blur 15x15--effect-vignette 0.5:0.5 --ring-color bb00cc --key-hl-color 880033 --line-color 00000000 --inside-color 00000088--separator-color 00000000 --grace 5' \
+#    timeout 2700 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"' \
 
 ### Key bindings
 bindsym $mod+Return exec $term
@@ -149,6 +149,11 @@ input "16715:1:Alpaca_Keyboards_ErgoDox_76_\"HotDox\"" {
 	xkb_variant intl
 }
 
+input "7185:45133:Input:Club_Infinity_Ergodox_(QMK)" {
+	xkb_layout us
+	xkb_variant intl
+}
+
 input type:mouse {
 	dwt disabled
 	events enabled
@@ -179,6 +184,7 @@ bindsym XF86MonBrightnessUp exec "zsh /home/boj/.config/sway/notify-brightness.s
 bindsym --locked XF86AudioPlay exec "zsh /home/boj/.config/sway/keybinds-spotify.sh toggle"
 bindsym XF86AudioNext exec "zsh /home/boj/.config/sway/keybinds-spotify.sh next"
 bindsym XF86AudioPrev exec "zsh /home/boj/.config/sway/keybinds-spotify.sh previous"
+bindsym Ctrl+f7 exec "zsh /home/boj/.config/sway/notify-brightness.sh keyboard"
 bindsym $mod+p exec grim -g "$(slurp -d)" - | wl-copy -t image/png
 bindsym XF86TouchpadToggle input type:touchpad events toggle
 
