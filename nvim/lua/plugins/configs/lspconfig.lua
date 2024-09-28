@@ -26,10 +26,6 @@ lspconfig["clangd"].setup {
 
     -- utils.load_mappings("lspconfig", { buffer = bufnr })
 
-    if client.server_capabilities.signatureHelpProvider then
-    require("nvchad.signature").setup(client)
-    end
-
     if client.supports_method "textDocument/semanticTokens" then
     client.server_capabilities.semanticTokensProvider = nil
     end

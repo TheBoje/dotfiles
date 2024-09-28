@@ -39,12 +39,10 @@ vim.opt.tabstop = 4
 --  shellxquote = "",
 --}
 
---for option, value in pairs(powershell_options) do
---  vim.opt[option] = value
---end
-
 vim.filetype.add {
-  shader = "hlsl", -- make .shader files to have hlsl as filetype
-  hlsl = "hlsl", -- make .hlsl files to have hlsl filetype so treesitter gives it proper highlight
-  glsl = "glsl", -- make .hlsl files to have hlsl filetype so treesitter gives it proper highlight
+  extension = {
+    shader = "hlsl",
+    hlsl = "hlsl",
+    glsl = "glsl",
+  }
 }
