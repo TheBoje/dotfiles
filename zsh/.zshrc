@@ -97,14 +97,6 @@ alias swaylock="swaylock \
   alias pacman="pacman --color=always"
   alias yay="yay --color=always"
 
-  alias dc="docker compose"
-  alias dcu="docker compose up --remove-orphans"
-  alias dcud="docker compose up -d --remove-orphans"
-  alias dcd="docker compose down"
-  alias dcdr="docker compose down --remove-orphans"
-  alias dcps="docker compose ps"
-  alias dcl="docker compose logs -f"
-
   alias git-ssh='git remote set-url origin "$(git remote get-url origin | sed -E '\''s,^https://([^/]*)/(.*)$,git@\1:\2,'\'')"'
 
   alias git-https='git remote set-url origin "$(git remote get-url origin | sed -E '\''s,^git@([^:]*):/*(.*)$,https://\1/\2,'\'')"'
