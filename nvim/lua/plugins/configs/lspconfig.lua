@@ -1,67 +1,58 @@
-dofile(vim.g.base46_cache .. "lsp")
-require "nvchad.lsp"
+local on_attach = require("nvchad.configs.lspconfig").on_attach
+local capabilities = require("nvchad.configs.lspconfig").capabilities
 
-local M = {}
-local utils = require "core.utils"
+local lspconfig = require "lspconfig"
+local servers = { "lua_ls", "bashls", "cmake", "qmlls" }
 
--- export on_attach & capabilities for custom lspconfigs
-M.on_attach = function(client, bufnr)
-  utils.load_mappings("lspconfig", { buffer = bufnr })
+for _, lsp in ipairs(servers) do
+  lspconfig[lsp].setup {
+    on_attach = on_attach,
+    capabilities = capabilities,
+  }
+end
 
-  if client.server_capabilities.signatureHelpProvider then
+
+local clangd_capabilities = capabilities
+clangd_capabilities.textDocument.semanticHighlighting = true
+clangd_capabilities.offsetEncoding = "utf-8"
+
+-- local utils = require "core.utils"
+
+lspconfig["clangd"].setup {
+  on_attach = function(client, bufnr)
+    on_attach(client, bufnr)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+
+    -- utils.load_mappings("lspconfig", { buffer = bufnr })
+
+    if client.server_capabilities.signatureHelpProvider then
     require("nvchad.signature").setup(client)
-  end
-end
+    end
 
--- disable semantic tokens
-M.on_init = function(client, _)
-  if not utils.load_config().ui.lsp_semantic_tokens and client.supports_method "textDocument/semanticTokens" then
+    if client.supports_method "textDocument/semanticTokens" then
     client.server_capabilities.semanticTokensProvider = nil
-  end
-end
-
-M.capabilities = vim.lsp.protocol.make_client_capabilities()
-
-M.capabilities.textDocument.completion.completionItem = {
-  documentationFormat = { "markdown", "plaintext" },
-  snippetSupport = true,
-  preselectSupport = true,
-  insertReplaceSupport = true,
-  labelDetailsSupport = true,
-  deprecatedSupport = true,
-  commitCharactersSupport = true,
-  tagSupport = { valueSet = { 1 } },
-  resolveSupport = {
-    properties = {
-      "documentation",
-      "detail",
-      "additionalTextEdits",
-    },
+    end
+    require("clangd_extensions.inlay_hints").setup_autocmd()
+    require("clangd_extensions.inlay_hints").set_inlay_hints()
+  end,
+  capabilities = clangd_capabilities,
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--background-index-priority=low",
+    "--include-cleaner-stdlib",
+    "-j=20",
+    -- "--query-driver='D:\\Perforce\\SDK\\llvm-project\\bin\\clang-tidy'",
+    "--clang-tidy",
+    "--compile-commands-dir=" .. vim.fn.getcwd(),
+    "--all-scopes-completion",
+    "--pch-storage=memory",
+    "--cross-file-rename",
+    "--completion-style=detailed",
+    "--header-insertion=iwyu",
+    "--header-insertion-decorators",
+    "--suggest-missing-includes",
+    "--log=verbose",
   },
 }
-
-require("lspconfig").lua_ls.setup {
-  on_init = M.on_init,
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand "$VIMRUNTIME/lua"] = true,
-          [vim.fn.expand "$VIMRUNTIME/lua/vim/lsp"] = true,
-          [vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types"] = true,
-          [vim.fn.stdpath "data" .. "/lazy/lazy.nvim/lua/lazy"] = true,
-        },
-        maxPreload = 100000,
-        preloadFileSize = 10000,
-      },
-    },
-  },
-}
-
-return M
