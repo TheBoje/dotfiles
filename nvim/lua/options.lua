@@ -39,7 +39,7 @@ vim.opt.tabstop = 4
 --  shellxquote = "",
 --}
 --
--- for option, value in paris(powershell_options) do
+-- for option, value in pairs(powershell_options) do
 --     vim.opt[option] = value
 -- end
 
