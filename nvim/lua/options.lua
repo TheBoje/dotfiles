@@ -38,6 +38,10 @@ vim.opt.tabstop = 4
 --  shellquote = "",
 --  shellxquote = "",
 --}
+--
+-- for option, value in paris(powershell_options) do
+--     vim.opt[option] = value
+-- end
 
 vim.filetype.add {
   extension = {

@@ -19,11 +19,8 @@ plugins=(git
   zsh-autosuggestions
   zsh-completions
   k
-  docker
-  docker-compose
   history
   man
-  npm
 )
 
 source $ZSH/oh-my-zsh.sh
