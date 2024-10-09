@@ -1,5 +1,6 @@
 local on_attach = require("nvchad.configs.lspconfig").on_attach
 local capabilities = require("nvchad.configs.lspconfig").capabilities
+local on_init = require("nvchad.configs.lspconfig").on_init
 
 local lspconfig = require "lspconfig"
 local servers = { "lua_ls", "bashls", "cmake", "qmlls" }
@@ -8,6 +9,7 @@ for _, lsp in ipairs(servers) do
   lspconfig[lsp].setup {
     on_attach = on_attach,
     capabilities = capabilities,
+    on_init = on_init,
   }
 end
 
@@ -19,19 +21,21 @@ clangd_capabilities.offsetEncoding = "utf-8"
 -- local utils = require "core.utils"
 
 lspconfig["clangd"].setup {
-  on_attach = function(client, bufnr)
-    on_attach(client, bufnr)
+  on_init = on_init,
+  -- on_attach = function(client, bufnr)
+  --   on_attach(client, bufnr)
     -- client.server_capabilities.documentFormattingProvider = false
     -- client.server_capabilities.documentRangeFormattingProvider = false
 
     -- utils.load_mappings("lspconfig", { buffer = bufnr })
 
-    if client.supports_method "textDocument/semanticTokens" then
-    client.server_capabilities.semanticTokensProvider = nil
-    end
-    require("clangd_extensions.inlay_hints").setup_autocmd()
-    require("clangd_extensions.inlay_hints").set_inlay_hints()
-  end,
+  --   if client.supports_method "textDocument/semanticTokens" then
+  --   client.server_capabilities.semanticTokensProvider = nil
+  --   end
+  --   require("clangd_extensions.inlay_hints").setup_autocmd()
+  --   require("clangd_extensions.inlay_hints").set_inlay_hints()
+  -- end,
+  on_attach = on_attach,
   capabilities = clangd_capabilities,
   cmd = {
     "clangd",
