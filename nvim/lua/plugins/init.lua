@@ -111,7 +111,7 @@ return {
   {
     "nvim-tree/nvim-tree.lua",
     opts = function()
-      require "plugins.configs.nvimtree"
+      return require "plugins.configs.nvimtree"
     end,
   },
 
@@ -125,14 +125,14 @@ return {
     "nvim-telescope/telescope.nvim",
     dependencies = { "nvim-telescope/telescope-fzf-native.nvim" },
     opts = function()
-      require "plugins.configs.telescope"
+      return require "plugins.configs.telescope"
     end,
   },
 
   {
     "hrsh7th/nvim-cmp",
     opts = function()
-      require "plugins.configs.cmp"
+      return require "plugins.configs.cmp"
     end,
   },
   {
