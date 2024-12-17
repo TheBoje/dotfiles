@@ -35,7 +35,7 @@ while true; do
 	done < <(
 		# requires playerctl>=2.0
 		# Add non-space character ":" before each parameter to prevent 'read' from skipping over them
-		playerctl --follow metadata --player playerctld --format \
+		playerctl --follow metadata --player spotify --format \
 			$':{{emoji(status)}}\t:{{position}}\t:{{mpris:length}}\t:{{playerName}}\t:{{markup_escape(artist)}}\t:{{markup_escape(title)}}\t:{{mpris:artUrl}}\t:{{duration(position)}}\t:{{duration(mpris:length)}}' &
 		echo $! >"$XDG_RUNTIME_DIR/waybar-playerctl.pid"
 	)
