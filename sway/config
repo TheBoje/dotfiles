@@ -154,6 +154,11 @@ input "7185:45133:Input:Club_Infinity_Ergodox_(QMK)" {
 	xkb_variant intl
 }
 
+input "12951:18804:ZSA_Technology_Labs_ErgoDox_EZ" {
+	xkb_layout us
+	xkb_variant intl
+}
+
 input type:mouse {
 	dwt disabled
 	events enabled
