@@ -5,6 +5,7 @@
 					  // "width": 1280, // Waybar width
 		"spacing": 4, // Gaps between modules (4px)
 					  // Choose the order of the modules
+        "ipc": true,
 		"modules-left": ["sway/workspaces", "sway/mode"],
 		"modules-center": ["custom/media"],
 		"modules-right": [
@@ -170,17 +171,18 @@
 			"path": "/home",
 		},
 		"custom/media": {
-			//"interval": 5,
 			"format": "{icon} {0}",
-			"return-type": "json",
-			"max-length": 60,
 			"format-icons": {
 				"spotify": "",
-				"default": ""
+				"default": ""
 			},
-			"escape": true,
-			"exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Script in resources folder
-																						// "exec": "$HOME/.config/waybar/mediaplayer.py --player spotify 2> /dev/null" // Filter player based on name
+            "return-type": "json",
+            "max-length": 60,
+            "exec": "$HOME/.config/waybar/playerctl.sh 2> /dev/null",
+            "on-click": "playerctl play-pause",
+            "on-right-click": "sys-notif media",
+            "on-scroll-up": "playerctl position 3+",
+            "on-scroll-down": "playerctl position 3-"
 		}
 }
 
