@@ -1,5 +1,4 @@
 -- since this is just an example spec, don't actually load anything here and return an empty spec
--- stylua: ignore
 --if true then return {} end
 
 -- every spec file under the "plugins" directory will be loaded automatically by lazy.nvim
@@ -13,6 +12,30 @@ return {
     "nvim-telescope/telescope.nvim",
     -- change some options
     opts = {
+      defaults = {
+        layout_strategy = "vertical",
+        --layout_strategy = "horizontal",
+        layout_config = {
+          vertical = {
+            prompt_position = "top",
+            preview_width = 0.55,
+            results_width = 0.8,
+            mirror = true,
+          },
+          horizontal = {
+            prompt_position = "top",
+            preview_width = 0.55,
+            results_width = 0.8,
+          },
+          width = 0.87,
+          height = 0.80,
+          preview_cutoff = 120,
+        },
+        cache_picker = {
+          num_pickers = -1,
+          ignore_empty_prompt = false,
+        },
+      },
       extensions_list = { "themes", "terms", "fzf" },
       extensions = {
         fzf = {
@@ -21,17 +44,6 @@ return {
           override_file_sorter = true,
           case_mode = "smart_case",
         },
-      },
-    },
-  },
-
-  -- add pyright to lspconfig
-  {
-    "neovim/nvim-lspconfig",
-    ---@class PluginLspOpts
-    opts = {
-      servers = {
-        clangd = {},
       },
     },
   },
@@ -85,12 +97,77 @@ return {
         "clangd",
         "clang-format",
         "codelldb",
+        "sonarlint-language-server",
       },
     },
   },
 
   {
-    'stevearc/overseer.nvim',
+    "stevearc/overseer.nvim",
     opts = {},
+  },
+  {
+    "lucaSartore/nvim-dap-exception-breakpoints",
+    dependencies = { "mfussenegger/nvim-dap" },
+
+    config = function()
+      local set_exception_breakpoints = require("nvim-dap-exception-breakpoints")
+
+      vim.api.nvim_set_keymap(
+        "n",
+        "<leader>dc",
+        "",
+        { desc = "[D]ebug [C]ondition breakpoints", callback = set_exception_breakpoints }
+      )
+    end,
+  },
+  {
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/nvim-nio",
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "Shatur/neovim-tasks",
+      "rosstang/neotest-catch2",
+    },
+    config = function()
+      require("neotest").setup({
+
+        adapters = {
+          require("neotest-catch2")(),
+        },
+      })
+    end,
+  },
+  {
+    "nvzone/floaterm",
+    dependencies = "nvzone/volt",
+    lazy = false,
+    opts = {
+      mappings = {
+        term = function(buf)
+          vim.keymap.set(
+            "t",
+            "<C-a>",
+            "<C-\\><C-n><CMD>FloatermToggle<CR>",
+            { buffer = buf, desc = "Toggle floating terminal" }
+          )
+          vim.keymap.set("t", "<C-x>", [[<C-\><C-n>]], { buffer = buf, desc = "Exit terminal mode" })
+          vim.keymap.set(
+            "t",
+            "<esc>",
+            "<C-\\><C-n><CMD>FloatermToggle<CR>",
+            { buffer = buf, desc = "Exit terminal mode" }
+          )
+        end,
+      },
+    },
+    cmd = "FloatermToggle",
+  },
+  {
+    "lewis6991/gitsigns.nvim",
+    opts = { current_line_blame = true },
   },
 }

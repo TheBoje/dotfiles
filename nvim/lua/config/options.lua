@@ -20,3 +20,6 @@ vim.filetype.add({
     glsl = "glsl",
   },
 })
+
+-- Softwrap
+-- vim.opt.wrap = true

@@ -23,8 +23,6 @@ map(
   ":lua require('telescope.builtin').resume()<CR>",
   { desc = "Re-open last Telescope buffer (Resume)" }
 )
-map("n", "<leader>nf", ":lua require('neogen').generate()<CR>", { desc = "Generate doxygen comment" })
-
 map("n", "<F4>", "<CMD>DapDisconnect<CR>", { desc = "DAP Disconnect" })
 map("n", "<F16>", "<CMD>DapTerminate<CR>", { desc = "DAP Terminate" })
 map("n", "<F5>", "<CMD>DapContinue<CR>", { desc = "DAP Continue" })
@@ -45,3 +43,5 @@ map("n", "<C-F12>", "<CMD>DapStepOut<CR>", { desc = "DAP Step Out" })
 
 map("n", "<C-S-j>", "<CMD>lua require('dap').down()<CR>", { desc = "DAP Callstack Down" })
 map("n", "<C-S-k>", "<CMD>lua require('dap').up()<CR>", { desc = "DAP Callstack Up" })
+
+map("n", "<C-a>", "<CMD>FloatermToggle<CR>", { desc = "Toggle floating terminal" })
